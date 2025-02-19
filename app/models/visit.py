@@ -1,4 +1,4 @@
-class Appointment:
+class Visit:
     def __init__(self, id, client, property, date_time):
         self.id = id
         self.client = client

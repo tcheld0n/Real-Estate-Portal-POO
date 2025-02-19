@@ -1,7 +1,5 @@
 from app.data.database import db
 from app.models.review import Review
-from app.models.client import Client
-from app.models.agent import Agent
 
 class ReviewController:
     def add_review(self, id, reviewer_id, property_id, rating, comment):

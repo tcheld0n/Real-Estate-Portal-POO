@@ -1,12 +1,12 @@
 from app.data.database import db
 from app.models.property import Property
-from app.models.agent import Agent
+from app.models.user import User
 
 class PropertyController:
-    def add_property(self, id, title, description, price, location, agent: Agent):
-        new_property = Property(id, title, description, price, location, agent)
-        db.add_property(new_property)
-        agent.add_property(new_property)
+    def add_property(self, id, title, description, price, location, property_type, user: User):
+        new_property = Property(id, title, description, price, location, property_type, user)
+        db.add_property(new_property)        # Adiciona ao banco de dados
+        user.add_property(new_property)      # Associa ao usuário (agente)
         return new_property
 
     def list_properties(self):
@@ -31,3 +31,11 @@ class PropertyController:
             db.properties.remove(property_to_delete)
             return True
         return False
+    def search_property_by_type(self, property_type):
+        return [prop for prop in db.get_properties() if prop.property_type.lower() == property_type.lower()]
+
+    def search_property_by_location(self, location):
+        return [prop for prop in db.get_properties() if location.lower() in prop.location.lower()]
+
+    def search_property_by_price_range(self, price_min, price_max):
+        return [prop for prop in db.get_properties() if price_min <= prop.price <= price_max]

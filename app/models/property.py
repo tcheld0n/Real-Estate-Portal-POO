@@ -1,15 +1,15 @@
 class Property:
-    def __init__(self, id, title, description, price, location, agent, type):
+    def __init__(self, id, title, description, price, location, property_type, agent):
         self.id = id
         self.title = title
         self.description = description
         self.price = price
         self.location = location
+        self.property_type = property_type     #sale, rent
         self.agent = agent
-        self.type = type     #sale, rent
         self.available = True
 
-    def update_details(self, title=None, description=None, price=None, location=None, type=None):
+    def update_details(self, title=None, description=None, price=None, location=None, property_type=None):
         if title:
             self.title = title
         if description:
@@ -17,7 +17,7 @@ class Property:
         if price:
             self.price = price
         if type:
-            self.type = type
+            self.property_type = property_type
         if location:
             self.location = location
 
