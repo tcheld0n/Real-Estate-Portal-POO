@@ -1,27 +1,50 @@
-class User:
-    def __init__(self, user_id, name, email, password, user_type):
-        self.id = user_id
-        self.name = name
-        self.email = email
-        self.password = password
-        self.user_type = user_type  # Cliente ou Agente
+from abc import ABC, abstractmethod
 
-        # Apenas agentes possuem uma lista de propriedades
-        if self.user_type == "Agente":
-            self.properties = []
-        else:
-            self.properties = None
+class User(ABC):
+    def __init__(self, user_id, name, email, password):
+        self._id = user_id
+        self._name = name
+        self._email = email
+        self._password = password
 
-    # Adiciona a propriedade a lista do agente
-    def add_property(self, property):
-        if self.user_type != "Agente":
-            raise Exception("Erro: Apenas agentes podem adicionar propriedades!")
-        self.properties.append(property)
+    # Getters e setters
+    @property
+    def id(self):
+        return self._id
 
-    def list_properties(self):
-        if self.user_type != "Agente":
-            raise Exception("Erro: Somente agentes possuem propriedades!")
-        return self.properties
+    @property
+    def name(self):
+        return self._name
+
+    @name.setter
+    def name(self, value):
+        if not value:
+            raise ValueError("O nome não pode ser vazio.")
+        self._name = value
+
+    @property
+    def email(self):
+        return self._email
+
+    @email.setter
+    def email(self, value):
+        if not value:
+            raise ValueError("O email não pode ser vazio.")
+        self._email = value
+
+    @property
+    def password(self):
+        return self._password
+
+    @password.setter
+    def password(self, value):
+        if not value:
+            raise ValueError("A senha não pode ser vazia.")
+        self._password = value
+
+    @abstractmethod
+    def get_role(self):
+        pass
 
     def __str__(self):
-        return f"{self.user_type} - {self.name} ({self.email})"
+        return f"Usuário: {self._name} ({self._email})"

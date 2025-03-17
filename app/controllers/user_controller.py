@@ -1,4 +1,6 @@
 from app.data.database import db
+from app.models.agent import Agent
+from app.models.client import Client
 from app.models.user import User
 
 class UserController:
@@ -10,7 +12,7 @@ class UserController:
         user = next((user for user in db.get_users() if user.email == email and user.password == password), None)
 
         if user:
-            print(f"Login realizado com sucesso! Bem-vindo, {user.name} ({user.user_type}).")
+            print(f"Login realizado com sucesso! Bem-vindo, {user.name}.")
             return user  # Retorna o usuário logado
         else:
             print("Erro: Email ou senha incorretos.")
@@ -29,8 +31,13 @@ class UserController:
             print(f"Erro: O email {email} já está em uso.")
             return None
 
-        # Cria um novo usuário
-        new_user = User(len(db.get_users()) + 1, name, email, password, user_type.capitalize())
+        # Cria um novo usuário (instanciando Client ou Agent)
+        if user_type.capitalize() == "Cliente":
+            new_user = Client(len(db.get_users()) + 1, name, email, password)
+        elif user_type.capitalize() == "Agente":
+            new_user = Agent(len(db.get_users()) + 1, name, email, password)
+
+        # Adiciona o novo usuário ao banco de dados
         db.add_user(new_user)
         print(f"Usuário {name} registrado com sucesso como {user_type.capitalize()}!")
         return new_user
@@ -69,3 +76,9 @@ class UserController:
             print("Nenhum agente cadastrado.")
         for agent in agents:
             print(agent)
+
+    def find_user_by_id(self, user_id):
+        for user in db.get_users():
+            if user.id == user_id:
+                return user
+        return None
